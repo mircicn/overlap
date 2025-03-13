@@ -1,0 +1,190 @@
+<html>
+     <head>
+          <style>
+               /* .row{
+                    display:flex;   
+               } */
+               
+               .t0{
+                    float:left;
+                    background-color: hsl(0, 0%, 100%);
+               }
+               .t1{
+                    float:left;
+                    background-color: hsl(50, 100%, 63%);
+               }
+               .t2{
+                    float:left;
+                    background-color: hsl(40, 100%, 63%);
+               }
+               .t3{
+                    float:left;
+                    background-color: hsl(30, 100%, 63%);
+               }
+          </style>
+     </head>
+    <body style="display: flex; flex-direction: column;  width: 100vw;align-items: center; height:95vh;justify-content: space-around;">
+     <h1> Type text to convert it</h1>
+        <form style="height: 60px;">
+            <input type="text" id="TextToEncrypt" style="width: 40vw; height: 50px;font-size: 30px; border-radius: 5px;">
+        </form>
+        <h2>With overlap</h2>
+        <div id="outputField" style="height: 300px;"></div>
+        <h2>Withoup overlap</h2>
+        <div id="outputFieldnooverlap" style="height: 300px;"></div>
+        <script>
+            var charToArray = {
+    a:[[0,1,1],
+         [1,0,1],
+         [1,1,1]],
+    b:[[1,0,0],
+         [1,1,1],
+         [1,1,1]],
+    c:[[1,1,1],
+         [1,0,0],
+         [1,1,1]],    
+    d:[[1,1,0],
+         [1,0,1],
+         [1,1,0]],  
+    e:[[1,1,1],
+         [1,1,0],
+         [1,1,1]],
+    f:[[1,1,1],
+         [1,1,0],
+         [1,0,0]], 
+    g:[[1,1,1],
+         [1,1,1],
+         [0,1,1]],
+    d:[[1,1,0],
+         [1,0,1],
+         [1,1,0]],
+    h:[[1,0,1],
+         [1,1,1],
+         [1,0,1]],
+    i:[[1,1,1],
+         [0,1,0],
+         [1,1,1]],
+    j:[[1,1,0],
+         [0,1,0],
+         [1,0,0]],
+    k:[[1,0,1],
+         [1,1,0],
+         [1,0,1]],
+    l:[[1,0,0],
+         [1,0,0],
+         [1,1,1]],
+    m:[[1,1,0],
+         [1,1,1],
+         [1,0,1]],
+    n:[[1,1,0],
+         [1,0,1],
+         [1,0,1]],
+    o:[[1,1,1],
+         [1,0,1],
+         [1,1,1]],
+    p:[[1,1,1],
+         [1,1,1],
+         [1,0,0]],
+    q:[[1,1,1],
+         [1,0,1],
+         [0,0,1]],
+    r:[[1,1,0],
+         [1,0,1],
+         [1,0,0]],
+    s:[[0,1,1],
+         [0,1,0],
+         [1,1,0]],
+    t:[[1,1,1],
+         [0,1,0],
+         [0,1,0]],
+    u:[[1,0,1],
+         [1,0,1],
+         [1,1,1]],
+    v:[[1,0,1],
+         [1,0,1],
+         [0,1,0]],
+    w:[[1,0,1],
+         [1,1,1],
+         [1,1,1]],
+    x:[[1,0,1],
+         [0,1,0],
+         [1,0,1]],
+    y:[[1,0,1],
+         [0,1,0],
+         [0,1,0]],
+    z:[[1,1,0],
+         [0,1,0],
+         [0,1,1]]    }
+           
+         const charMap = new Map(Object.entries(charToArray))
+            var inputField = document.getElementById("TextToEncrypt") 
+            inputField.oninput = function() {
+               output = 0
+               output = structuredClone(charMap.get( inputField.value[0]))
+               
+               document.getElementById('outputField').replaceChildren()
+               document.getElementById('outputFieldnooverlap').replaceChildren()
+               
+               for (let i = 0; i<3; i++){
+                    empty_row = document.createElement('div') 
+                    empty_row.className = "row"
+                    empty_row.id = i
+                    document.getElementById('outputField').appendChild(empty_row)
+               }
+               for (let i = 0; i<3; i++){
+                    empty_row = document.createElement('div') 
+                    empty_row.className = "row"
+                    empty_row.id = i + "raw"
+                    document.getElementById('outputFieldnooverlap').appendChild(empty_row)
+               }
+
+               
+
+               for (let currentChar=1; currentChar<inputField.value.length;currentChar++){
+
+                    for (var currentRow = 0; currentRow < 3; currentRow++){
+                         output[currentRow][output[currentRow].length-1] += charMap.get(inputField.value[currentChar]) [currentRow][1]
+                         output[currentRow][output[currentRow].length-2] += charMap.get(inputField.value[currentChar]) [currentRow][0]
+                         output[currentRow].push( charMap.get(inputField.value[currentChar])[currentRow][2] )
+                    }
+               }     
+               console.log(output[0]+"\n"+output[1]+"\n"+output[2])
+               
+               for (let rowIndex =0; rowIndex<3; rowIndex++){
+                    for (let cellIndex=0; cellIndex< output[rowIndex].length; cellIndex++){
+                         new_cell = document.createElement("div")
+                         new_cell.className = "t"+output[rowIndex][cellIndex] +" cell"
+                         var compDimensions = 0.8*window.innerWidth/output[rowIndex].length
+                         compDimensions = Math.min(Math.max(compDimensions, 10), 100) +"px"
+                         new_cell.style.width = compDimensions
+                         new_cell.style.height = compDimensions
+                         document.getElementById(rowIndex).appendChild(new_cell)
+                    }
+               }
+
+
+               for(let j=0;j<inputField.value.length;j++){
+                    buffer = structuredClone( charMap.get( inputField.value[j] ))
+                    for (let rowIndex =0; rowIndex<3; rowIndex++){
+                         for (let cellIndex=0; cellIndex< 3; cellIndex++){
+                         new_cell = document.createElement("div")
+                         new_cell.className = "t"+buffer[rowIndex][cellIndex]*3 +" cell"
+                         var compDimensions = 0.8*window.innerWidth/(inputField.value.length*3)-6
+                         compDimensions = Math.min(Math.max(compDimensions, 10), 100) +"px"
+                         new_cell.style.width = compDimensions
+                         new_cell.style.height = compDimensions
+                         new_cell.style.border = "1px solid black"
+                         if (cellIndex==2){
+                              console.log("huaya")
+                              new_cell.style.marginRight = "20px"
+                         }
+                         document.getElementById(rowIndex+"raw").appendChild(new_cell)
+                    }
+
+               }
+               };
+
+            }
+          </script>
+    </body>
+</html>
