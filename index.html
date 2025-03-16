@@ -144,9 +144,9 @@
                for (let currentChar=1; currentChar<inputField.value.length;currentChar++){
 
                     for (var currentRow = 0; currentRow < 3; currentRow++){
-                         output[currentRow][output[currentRow].length-1] += charMap.get(inputField.value[currentChar]) [currentRow][1]
-                         output[currentRow][output[currentRow].length-2] += charMap.get(inputField.value[currentChar]) [currentRow][0]
-                         output[currentRow].push( charMap.get(inputField.value[currentChar])[currentRow][2] )
+                         output[currentRow][output[currentRow].length-1] += charMap.get(inputField.value[currentChar].toLowerCase()) [currentRow][1]
+                         output[currentRow][output[currentRow].length-2] += charMap.get(inputField.value[currentChar].toLowerCase()) [currentRow][0]
+                         output[currentRow].push( charMap.get(inputField.value[currentChar].toLowerCase())[currentRow][2] )
                     }
                }     
                console.log(output[0]+"\n"+output[1]+"\n"+output[2])
