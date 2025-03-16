@@ -120,8 +120,9 @@
          const charMap = new Map(Object.entries(charToArray))
             var inputField = document.getElementById("TextToEncrypt") 
             inputField.oninput = function() {
+               input = inputField.value.toLowerCase()
                output = 0
-               output = structuredClone(charMap.get( inputField.value[0]))
+               output = structuredClone(charMap.get( input[0]))
                
                document.getElementById('outputField').replaceChildren()
                document.getElementById('outputFieldnooverlap').replaceChildren()
@@ -141,12 +142,12 @@
 
                
 
-               for (let currentChar=1; currentChar<inputField.value.length;currentChar++){
+               for (let currentChar=1; currentChar<input.length;currentChar++){
 
                     for (var currentRow = 0; currentRow < 3; currentRow++){
-                         output[currentRow][output[currentRow].length-1] += charMap.get(inputField.value[currentChar].toLowerCase()) [currentRow][1]
-                         output[currentRow][output[currentRow].length-2] += charMap.get(inputField.value[currentChar].toLowerCase()) [currentRow][0]
-                         output[currentRow].push( charMap.get(inputField.value[currentChar].toLowerCase())[currentRow][2] )
+                         output[currentRow][output[currentRow].length-1] += charMap.get(input[currentChar]) [currentRow][1]
+                         output[currentRow][output[currentRow].length-2] += charMap.get(input[currentChar]) [currentRow][0]
+                         output[currentRow].push( charMap.get(input[currentChar])[currentRow][2] )
                     }
                }     
                console.log(output[0]+"\n"+output[1]+"\n"+output[2])
@@ -164,13 +165,13 @@
                }
 
 
-               for(let j=0;j<inputField.value.length;j++){
-                    buffer = structuredClone( charMap.get( inputField.value[j] ))
+               for(let j=0;j<input.length;j++){
+                    buffer = structuredClone( charMap.get( input[j] ))
                     for (let rowIndex =0; rowIndex<3; rowIndex++){
                          for (let cellIndex=0; cellIndex< 3; cellIndex++){
                          new_cell = document.createElement("div")
                          new_cell.className = "t"+buffer[rowIndex][cellIndex]*3 +" cell"
-                         var compDimensions = 0.8*window.innerWidth/(inputField.value.length*3)-6
+                         var compDimensions = 0.8*window.innerWidth/(input.length*3)-6
                          compDimensions = Math.min(Math.max(compDimensions, 10), 100) +"px"
                          new_cell.style.width = compDimensions
                          new_cell.style.height = compDimensions
